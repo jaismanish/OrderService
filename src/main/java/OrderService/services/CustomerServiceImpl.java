@@ -19,7 +19,7 @@ public class CustomerServiceImpl implements CustomerService {
     @Override
     public Customer register(Customer customer) throws UserAlreadyExistException {
         if(customerRepository.findByUsername(customer.getUsername()).isPresent())
-            throw new UserAlreadyExistException();
+            throw new UserAlreadyExistException("User Already Exist");
         customer.setPassword(passwordEncoder.encode(customer.getPassword()));
         return customerRepository.save(customer);
     }
