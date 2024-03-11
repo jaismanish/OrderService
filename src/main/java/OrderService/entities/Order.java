@@ -1,6 +1,6 @@
 package OrderService.entities;
 
-import OrderService.OrderStatus;
+import OrderService.enums.OrderStatus;
 import jakarta.persistence.*;
 
 import java.util.List;
