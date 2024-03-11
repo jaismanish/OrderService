@@ -2,6 +2,7 @@ package OrderService.services;
 
 import OrderService.entities.Customer;
 import OrderService.entities.Order;
+import OrderService.exception.UserNotRegisteredException;
 import OrderService.models.OrderRequest;
 import OrderService.models.OrderResponse;
 import OrderService.repositories.CustomerRepository;
@@ -16,6 +17,7 @@ public class OrderServiceImpl implements OrderService{
     private CustomerRepository customerRepository;
     @Override
     public OrderResponse create(String username, OrderRequest orderRequest) throws Exception {
+        Customer customer = customerRepository.findByUsername(username).orElseThrow(()-> new UserNotRegisteredException("User Not Registered"));
         Order order = new Order();
         order.create();
         Order savedOrder = ordersRepository.save(order);
