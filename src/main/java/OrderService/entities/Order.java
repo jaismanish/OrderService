@@ -2,9 +2,16 @@ package OrderService.entities;
 
 import OrderService.enums.OrderStatus;
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.util.List;
 
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
+@Entity
 public class Order {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -21,6 +28,8 @@ public class Order {
     private List<Item> items;
     private Integer deliveryValetId;
 
-    public void create(){}
-    public void assignDeliveryExecutive(){}
+    public void create(){
+
+    }
+    public void assignDeliveryValet(){}
 }
