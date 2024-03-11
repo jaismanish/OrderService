@@ -29,4 +29,5 @@ dependencies {
 
 tasks.named('test') {
 	useJUnitPlatform()
+	include 'OrderService.controllers.CustomersControllerTest.testRegisterNewCustomer'
 }
