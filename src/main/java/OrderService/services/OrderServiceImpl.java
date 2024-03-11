@@ -24,7 +24,7 @@ public class OrderServiceImpl implements OrderService{
     public OrderResponse create(String username, OrderRequest orderRequest) throws Exception {
         Customer customer = customerRepository.findByUsername(username).orElseThrow(()-> new UserNotRegisteredException("User Not Registered"));
         Order order = new Order();
-        order.create(orderRequest.getRestaurantId(), orderRequest.getItems(), customer);
+        order.create(orderRequest.getRestaurantId(), customer, orderRequest.getItems());
         Order savedOrder = ordersRepository.save(order);
 
         try {
