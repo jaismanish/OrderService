@@ -20,4 +20,7 @@ public class Order {
     @OneToMany(cascade = CascadeType.ALL)
     private List<Item> items;
     private Integer deliveryValetId;
+
+    public void create(){}
+    public void assignDeliveryExecutive(){}
 }

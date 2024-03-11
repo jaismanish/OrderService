@@ -21,7 +21,7 @@ public class OrdersController {
     private OrderService orderService;
 
     @PostMapping
-    public ResponseEntity<OrderResponse> create(@RequestBody OrderRequest ordersRequest) {
+    public ResponseEntity<OrderResponse> create(@RequestBody OrderRequest ordersRequest) throws Exception {
         String username = SecurityContextHolder.getContext().getAuthentication().getName();
         OrderResponse response = orderService.create(username, ordersRequest);
         return new ResponseEntity<>(response, HttpStatus.CREATED);
