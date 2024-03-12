@@ -1,7 +1,6 @@
 package OrderService.entities;
 
-import OrderService.clients.CatalogServiceClients;
-import OrderService.clients.entities.Restaurant;
+import OrderService.clients.CatalogServiceClient.CatalogServiceClients;
 import OrderService.enums.OrderStatus;
 import OrderService.exception.NoDeliveryValetFoundException;
 import jakarta.persistence.*;
@@ -10,7 +9,6 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import proto.Catalog;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 

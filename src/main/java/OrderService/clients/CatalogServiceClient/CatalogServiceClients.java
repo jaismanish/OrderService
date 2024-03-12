@@ -1,7 +1,5 @@
-package OrderService.clients;
+package OrderService.clients.CatalogServiceClient;
 
-import OrderService.clients.entities.Menu;
-import OrderService.clients.entities.Restaurant;
 import io.grpc.ManagedChannel;
 import io.grpc.ManagedChannelBuilder;
 import jakarta.persistence.Entity;
@@ -9,8 +7,6 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import proto.Catalog;
-
-import java.util.List;
 
 
 @Data

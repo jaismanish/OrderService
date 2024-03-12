@@ -1,17 +1,17 @@
-package OrderService.clients.entities;
+package OrderService.clients.CatalogServiceClient.entities;
 
-import OrderService.entities.Item;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.util.List;
-
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class Menu {
-    private List<Item> items;
+public class Restaurant {
+    private Integer restaurantId;
+    private String restaurantName;
+    private String address;
+    private Menu menu;
 }
