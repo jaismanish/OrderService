@@ -1,18 +1,15 @@
 package OrderService.services;
 
 import OrderService.entities.Customer;
-import OrderService.entities.Item;
 import OrderService.entities.Order;
-import OrderService.enums.OrderStatus;
 import OrderService.exception.NoDeliveryValetFoundException;
+import OrderService.exception.OrderNotFoundException;
 import OrderService.exception.UserNotRegisteredException;
 import OrderService.models.OrderRequest;
 import OrderService.models.OrderResponse;
 import OrderService.repositories.CustomerRepository;
 import OrderService.repositories.OrdersRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-
-import java.util.List;
 
 public class OrderServiceImpl implements OrderService{
 
@@ -42,5 +39,21 @@ public class OrderServiceImpl implements OrderService{
                 assignedOrder.getOrderStatus(),
                 assignedOrder.getDeliveryValetId()
         );
+    }
+
+    @Override
+    public OrderResponse fetch(String username, int orderId) throws UserNotRegisteredException, OrderNotFoundException {
+        Customer customer = customerRepository.findByUsername(username).orElseThrow(()-> new UserNotRegisteredException("User Not Registered"));
+        Order order = ordersRepository.findById(orderId).orElseThrow(()-> new OrderNotFoundException("Order Not Found"));
+
+        if(!customer.getOrders().contains(order))
+            throw new OrderNotFoundException("Order Id Not Found");
+        return new OrderResponse(order.getOrderId(),
+                order.getRestaurantId(),
+                order.getTotalPrice(),
+                username,
+                order.getItems(),
+                order.getOrderStatus(),
+                order.getDeliveryValetId());
     }
 }

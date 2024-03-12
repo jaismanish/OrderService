@@ -3,15 +3,16 @@ package OrderService.services;
 import OrderService.entities.Customer;
 import OrderService.exception.UserAlreadyExistException;
 import OrderService.repositories.CustomerRepository;
+import OrderService.repositories.OrdersRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
-
-import java.net.UnknownServiceException;
 
 public class CustomerServiceImpl implements CustomerService {
 
     @Autowired
     private CustomerRepository customerRepository;
+    @Autowired
+    private OrdersRepository ordersRepository;
 
     @Autowired
     private PasswordEncoder passwordEncoder;
@@ -23,4 +24,6 @@ public class CustomerServiceImpl implements CustomerService {
         customer.setPassword(passwordEncoder.encode(customer.getPassword()));
         return customerRepository.save(customer);
     }
+
+
 }
