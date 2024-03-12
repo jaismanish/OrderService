@@ -1,13 +1,18 @@
 package OrderService.entities;
 
+import OrderService.clients.CatalogServiceClients;
+import OrderService.clients.entities.Restaurant;
 import OrderService.enums.OrderStatus;
+import OrderService.exception.NoDeliveryValetFoundException;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import proto.Catalog;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Data
 @AllArgsConstructor
@@ -29,21 +34,58 @@ public class Order {
     private List<Item> items;
     private Integer deliveryValetId;
 
+    private final CatalogServiceClients catalogServiceClient = new CatalogServiceClients();
+
+//    public Order(CatalogServiceClients catalogServiceClient) {
+//        this.catalogServiceClient = catalogServiceClient;
+//    }
+
     public void create(int restaurantId, Customer customer, List<String> items){
-        Restaurant restaurant = new CatalogServiceClient().fetchRestaurantFromCatalogService(restaurantId);
-        List<String> restaurantItems = restaurant.getMenu().getItems().stream().map((Item::getItemName)).toList();
-        List<Item> itemsToOrder = new ArrayList<>();
-        for(String item : items){
-            if(!restaurantItems.contains(item))
-                throw new ItemNotInRestaurantException(ITEM_NOT_IN_RESTAURANT + item);
-            itemsToOrder.add(restaurant.getMenu().getItems().get(restaurantItems.indexOf(item)));
-        }
-        double total_price = itemsToOrder.stream().mapToDouble(Item::getPrice).sum();
+        Catalog.GetMenuItemsResponse menuItemsResponse = catalogServiceClient.getMenuItems(restaurantId);
+
+        List<Catalog.MenuItem> menuItems = menuItemsResponse.getMenuItemsList();
+
+        List<Item> validItems = validateAndFilterItems(menuItems, items);
+
+        double total = calculateTotalPrice(menuItems, validItems);
+
         this.restaurantId = restaurantId;
-        this.items = itemsToOrder;
-        this.totalPrice = total_price;
+        this.items = validItems;
+        this.totalPrice = total;
         this.orderStatus = OrderStatus.ACCEPTED;
         this.customer = customer;
     }
-    public void assignDeliveryValet(Integer restaurantId){}
+    private List<Item> validateAndFilterItems(List<Catalog.MenuItem> menuItems, List<String> itemNames) {
+        return itemNames.stream()
+                .filter(itemName -> menuItems.stream().anyMatch(menuItem -> menuItem.getName().equals(itemName)))
+                .map(itemName -> {
+                    Catalog.MenuItem matchingMenuItem = menuItems.stream()
+                            .filter(menuItem -> menuItem.getName().equals(itemName))
+                            .findFirst()
+                            .orElseThrow(() -> new RuntimeException("Menu item not found: " + itemName));
+
+                    return new Item(matchingMenuItem.getName());
+                })
+                .collect(Collectors.toList());
+    }
+    private double calculateTotalPrice(List<Catalog.MenuItem> menuItems, List<Item> selectedItems) {
+        double total = 0.0;
+
+        for (Item selectedItem : selectedItems) {
+            Catalog.MenuItem menuItem = menuItems.stream()
+                    .filter(item -> {
+                        item.getName();
+                        return false;
+                    })
+                    .findFirst()
+                    .orElseThrow(() -> new RuntimeException("Menu item not found: " + selectedItem));
+
+            total += menuItem.getPrice();
+        }
+
+        return total;
+    }
+    public void assignDeliveryValet(Integer restaurantId) throws NoDeliveryValetFoundException {
+        throw new NoDeliveryValetFoundException("");
+    }
 }

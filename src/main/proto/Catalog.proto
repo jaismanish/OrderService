@@ -1,0 +1,61 @@
+syntax = "proto3";
+
+// buf:lint:ignore PACKAGE_DIRECTORY_MATCH
+package proto;
+
+//option go_package = "/proto";
+
+message Restaurant {
+  int32 id = 1;
+  string name = 2;
+  string location = 3;
+}
+
+message MenuItem {
+  int32 id = 1;
+  string name = 2;
+  double price = 3;
+  int32 restaurant_id = 4;
+}
+
+service CatalogService {
+  rpc AddRestaurant(AddRestaurantRequest) returns (AddRestaurantResponse);
+  rpc AddMenuItem(AddMenuItemRequest) returns (AddMenuItemResponse);
+  rpc GetRestaurants(GetRestaurantsRequest) returns (GetRestaurantsResponse);
+  rpc GetMenuItems(GetMenuItemsRequest) returns (GetMenuItemsResponse);
+}
+
+message AddRestaurantRequest {
+  string name = 1;
+  string location = 2;
+}
+
+message AddRestaurantResponse {
+  bool success = 1;
+  Restaurant restaurant = 2;
+}
+
+message AddMenuItemRequest {
+  string name = 1;
+  double price = 2;
+  int32 restaurant_id = 3;
+}
+
+message AddMenuItemResponse {
+  bool success = 1;
+  MenuItem menuItem = 2;
+}
+
+message GetRestaurantsRequest {}
+
+message GetRestaurantsResponse {
+  repeated Restaurant restaurants = 1;
+}
+
+message GetMenuItemsRequest {
+  int32 restaurant_id = 1;
+}
+
+message GetMenuItemsResponse {
+  repeated MenuItem menuItems = 1;
+}

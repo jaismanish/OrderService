@@ -25,6 +25,9 @@ dependencies {
 	runtimeOnly 'org.postgresql:postgresql'
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 	testImplementation 'org.springframework.security:spring-security-test'
+	implementation 'io.grpc:grpc-netty-shaded:1.62.2'
+	implementation 'io.grpc:grpc-protobuf:1.62.2'
+	implementation 'io.grpc:grpc-stub:1.62.2'
 }
 
 tasks.named('test') {
