@@ -2,6 +2,7 @@ package OrderService.services;
 
 import OrderService.entities.Customer;
 import OrderService.entities.Order;
+import OrderService.enums.OrderStatus;
 import OrderService.exception.NoDeliveryValetFoundException;
 import OrderService.exception.OrderNotFoundException;
 import OrderService.exception.UserNotRegisteredException;
@@ -55,5 +56,20 @@ public class OrderServiceImpl implements OrderService{
                 order.getItems(),
                 order.getOrderStatus(),
                 order.getDeliveryValetId());
+    }
+
+    @Override
+    public OrderResponse update(int orderId, OrderStatus status) throws OrderNotFoundException {
+        Order order = ordersRepository.findById(orderId).orElseThrow(()-> new OrderNotFoundException("Order Not Found"));
+        order.setOrderStatus(status);
+
+        Order updatedOrder = ordersRepository.save(order);
+        return new OrderResponse(updatedOrder.getOrderId(),
+                updatedOrder.getRestaurantId(),
+                updatedOrder.getTotalPrice(),
+                updatedOrder.getCustomer().getUsername(),
+                updatedOrder.getItems(),
+                updatedOrder.getOrderStatus(),
+                updatedOrder.getDeliveryValetId());
     }
 }

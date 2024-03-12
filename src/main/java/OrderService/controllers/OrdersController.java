@@ -1,5 +1,6 @@
 package OrderService.controllers;
 
+import OrderService.enums.OrderStatus;
 import OrderService.exception.OrderNotFoundException;
 import OrderService.exception.UserNotRegisteredException;
 import OrderService.models.OrderRequest;
@@ -30,6 +31,12 @@ public class OrdersController {
     public ResponseEntity<OrderResponse> fetch(@PathVariable("order_id") int orderId) throws UserNotRegisteredException, OrderNotFoundException {
         String username = SecurityContextHolder.getContext().getAuthentication().getName();
         OrderResponse response = orderService.fetch(username, orderId);
+        return new ResponseEntity<>(response, HttpStatus.OK);
+    }
+
+    @PutMapping("/{order_id}")
+    public ResponseEntity<OrderResponse> update(@PathVariable("order_id") int orderId, @RequestParam OrderStatus status) throws OrderNotFoundException {
+        OrderResponse response = orderService.update(orderId, status);
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
