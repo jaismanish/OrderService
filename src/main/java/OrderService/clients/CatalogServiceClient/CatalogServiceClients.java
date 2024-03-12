@@ -12,7 +12,6 @@ import proto.Catalog;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor(force = true)
-@Entity
 public class CatalogServiceClients {
     private final String grpcServerHost;
     private final int grpcServerPort;
