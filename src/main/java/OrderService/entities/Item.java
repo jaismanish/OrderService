@@ -18,9 +18,8 @@ public class Item {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Integer orderItemId;
+    private Integer itemId;
     private String itemName;
+    private Double price;
 
-    public Item(String itemName) {
-        this.itemName = itemName;
-    }
 }

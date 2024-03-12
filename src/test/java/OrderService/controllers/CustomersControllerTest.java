@@ -12,6 +12,7 @@ import org.mockito.MockitoAnnotations;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
+import java.util.ArrayList;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -36,11 +37,11 @@ public class CustomersControllerTest {
 
     @Test
     public void testRegisterNewCustomer() throws UserAlreadyExistException {
-        Customer newCustomer = new Customer(1, "new_user", "password123", "27th main");
+        Customer newCustomer = new Customer(1, "new_user", "password123", "27th main", new ArrayList<>());
 
         when(customerRepository.findByUsername("new_user")).thenReturn(Optional.empty());
         when(passwordEncoder.encode("password123")).thenReturn("encodedPassword");
-        when(customerRepository.save(newCustomer)).thenReturn(new Customer(1, "new_user", "encodedPassword", "27th main"));
+        when(customerRepository.save(newCustomer)).thenReturn(new Customer(1, "new_user", "encodedPassword", "27th main", new ArrayList<>()));
 
         Customer registeredCustomer = customerService.register(newCustomer);
 
@@ -55,7 +56,7 @@ public class CustomersControllerTest {
 
     @Test
     public void testRegisterExistingCustomer() {
-        Customer existingCustomer = new Customer(1, "existing_user", "password456", "27th main");
+        Customer existingCustomer = new Customer(1, "existing_user", "password456", "27th main", new ArrayList<>());
 
         when(customerRepository.findByUsername("existing_user")).thenReturn(Optional.of(existingCustomer));
 
