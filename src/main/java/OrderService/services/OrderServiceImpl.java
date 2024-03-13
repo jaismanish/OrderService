@@ -19,7 +19,7 @@ public class OrderServiceImpl implements OrderService{
     @Autowired
     private CustomerRepository customerRepository;
     @Override
-    public OrderResponse create(String username, OrderRequest orderRequest) throws Exception {
+    public OrderResponse create(String username, OrderRequest orderRequest) throws NoDeliveryValetFoundException {
         Customer customer = customerRepository.findByUsername(username).orElseThrow(()-> new UserNotRegisteredException("User Not Registered"));
         Order order = new Order();
         order.create(orderRequest.getRestaurantId(), customer, orderRequest.getItems());
@@ -29,7 +29,7 @@ public class OrderServiceImpl implements OrderService{
             savedOrder.assignDeliveryValet(orderRequest.getRestaurantId());
         } catch (NoDeliveryValetFoundException e) {
             ordersRepository.delete(savedOrder);
-            throw new Exception("No Delivery Valet Found Nearby");
+            throw new NoDeliveryValetFoundException("No Delivery Valet Found Nearby");
         }
         Order assignedOrder = ordersRepository.save(savedOrder);
         return new OrderResponse(assignedOrder.getOrderId(),
